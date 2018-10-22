@@ -16,8 +16,7 @@ import java.io.FileInputStream;
 public class Arquivo {
     public File file;
     public int rBlock;
-    public int wBlock; //testedsadasdas
-    
+    public int wBlock;
     
     public Arquivo(String file){
         this.file = new File(file);
