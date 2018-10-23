@@ -7,8 +7,6 @@
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-import static java.lang.Thread.sleep;
-
 public class Arquivo{
     private File file;
     
@@ -23,17 +21,12 @@ public class Arquivo{
                 bw.write(frase);
                 bw.close();
                 System.out.println("Ok!");
-                sleep(1000);
                 return true;
             }
             catch (IOException e) {
-            e.printStackTrace();
-            return false;
-            } catch (InterruptedException e) {
                 e.printStackTrace();
+                return false;
             }
-
-        return false;
     }
     String ler(int inic, int fim){
             try{
