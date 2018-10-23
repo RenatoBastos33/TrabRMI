@@ -5,8 +5,9 @@ import java.util.concurrent.Semaphore;
 
 
 public class trabalhoServidor implements trabalho{
+    private static final int leitura = 0, escrita = 1;
     private Semaphore[][] semaforos;
-    boolean prioridade=true;
+    private boolean prioridade = true;
     private Arquivo[] listaArquivos;
     private trabalhoServidor(Arquivo[] listaArquivos, Semaphore[][] semaforos){
             this.listaArquivos = listaArquivos;
@@ -24,8 +25,8 @@ public class trabalhoServidor implements trabalho{
         try {
             Semaphore[][] semaforos=new Semaphore[3][2];
             for(int i=0;i<3;i++){
-                semaforos[i][0]=new Semaphore(3);
-                semaforos[i][1]=new Semaphore(1);
+                semaforos[i][leitura]=new Semaphore(3);
+                semaforos[i][escrita]=new Semaphore(1);
             }
             trabalhoServidor obj = new trabalhoServidor(lista, semaforos);
             trabalho stub = (trabalho) UnicastRemoteObject.exportObject(obj, 0);
@@ -42,11 +43,11 @@ public class trabalhoServidor implements trabalho{
     @Override
     public boolean escreverRMI(String texto, int arq) {
         try {
-            semaforos[arq][1].acquire();
-            semaforos[arq][0].acquire(3);
+            semaforos[arq][escrita].acquire();
+            semaforos[arq][leitura].acquire(3);
             listaArquivos[arq].escrever(texto);
-            semaforos[arq][1].release();
-            semaforos[arq][0].release(3);
+            semaforos[arq][escrita].release();
+            semaforos[arq][leitura].release(3);
             return true;
         }
         catch(Exception e) {
@@ -58,16 +59,15 @@ public class trabalhoServidor implements trabalho{
     @Override
     public String lerRMI(int ini, int fim, int arq) {
         try{
-            if(this.prioridade=false){
-                semaforos[arq][1].acquire();
-                semaforos[arq][0].acquire();
+            if(!this.prioridade){
+                semaforos[arq][escrita].acquire();
+                semaforos[arq][leitura].acquire();
                 listaArquivos[arq].ler(ini,fim);
-                semaforos[arq][1].release();
-                semaforos[arq][0].release();
+                semaforos[arq][escrita].release();
+                semaforos[arq][leitura].release();
             }else{
                 semaforos[arq][0].acquire();
                 listaArquivos[arq].ler(ini,fim);
-                semaforos[arq][0].release();
                 semaforos[arq][0].release();
             }
         }catch(Exception e) {
