@@ -1,8 +1,12 @@
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.concurrent.Semaphore;
+
 
 public class trabalhoServidor implements trabalho{
+
+
     private Arquivo[] listaArquivos;
     private trabalhoServidor(Arquivo[] listaArquivos){
             this.listaArquivos = listaArquivos;
@@ -16,6 +20,11 @@ public class trabalhoServidor implements trabalho{
         lista[1] = file2;
         lista[2] = file3;
         try {
+            Semaphore[][] semaforos=new Semaphore[3][2];
+            for(int i=0;i<3;i++){
+                semaforos[i][0]=new Semaphore(3);
+                semaforos[i][1]=new Semaphore(1);
+            }
             trabalhoServidor obj = new trabalhoServidor(lista);
             trabalho stub = (trabalho) UnicastRemoteObject.exportObject(obj, 0);
             Registry registry = LocateRegistry.getRegistry();
