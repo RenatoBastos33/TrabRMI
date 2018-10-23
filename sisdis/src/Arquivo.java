@@ -13,7 +13,7 @@ import java.util.Scanner;
 import java.io.EOFException;
 import java.io.FileInputStream;
 
-public class Arquivo {
+public class Arquivo{
     public File file;
     public int rBlock;
     public int wBlock;
