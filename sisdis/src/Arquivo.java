@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sisdis;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -51,8 +51,9 @@ public class Arquivo {
                 byte[] lixo=new byte[inic];
                 arq.read(lixo);
                 byte[] bytes=new byte[fim-inic];
+
                 arq.read(bytes);
-                String str = new String(bytes, "UTF-8");  
+                String str = new String(bytes, "UTF-8");
                 System.out.println(str);
                 this.rBlock--;
                 return true;
