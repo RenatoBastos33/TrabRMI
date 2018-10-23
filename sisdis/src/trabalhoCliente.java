@@ -8,7 +8,7 @@ public class trabalhoCliente{
         try{
             Registry registry = LocateRegistry.getRegistry();
             trabalho stub = (trabalho) registry.lookup("trabalho");
-            boolean deuBom = stub.escreverRMI("Tentativanumero1deescrita", 1);
+            boolean deuBom = stub.escreverRMI("JAVA IS TRASH", 1);
             System.out.println(deuBom);
         }
         catch(Exception e){
