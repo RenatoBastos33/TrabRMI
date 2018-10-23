@@ -4,64 +4,50 @@
  * and open the template in the editor.
  */
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
-import java.io.IOException;
-import java.util.Scanner;
-import java.io.EOFException;
-import java.io.FileInputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+
+import static java.lang.Thread.sleep;
 
 public class Arquivo{
-    public File file;
-    public int rBlock;
-    public int wBlock;
+    private File file;
     
-    public Arquivo(String file){
+    Arquivo(String file){
         this.file = new File(file);
-        this.rBlock=0;
-        this.wBlock=0;
     }
     
-    public boolean escrever(String frase){
-        if (this.wBlock==0 && this.rBlock==0){
-            this.wBlock++;
+    boolean escrever(String frase){
             try{
                 FileWriter fw = new FileWriter(this.file,true);
                 BufferedWriter bw = new BufferedWriter(fw);
                 bw.write(frase);
                 bw.close();
                 System.out.println("Ok!");
-                this.wBlock--;
+                sleep(1000);
                 return true;
             }
             catch (IOException e) {
             e.printStackTrace();
             return false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        }
+
         return false;
     }
-    public boolean ler(int inic,int fim){
-        if(this.wBlock==0){
-            this.rBlock++;
+    String ler(int inic, int fim){
             try{
                 FileInputStream arq=new FileInputStream(this.file);
                 byte[] lixo=new byte[inic];
                 arq.read(lixo);
                 byte[] bytes=new byte[fim-inic];
-
                 arq.read(bytes);
-                String str = new String(bytes, "UTF-8");
+                String str = new String(bytes, StandardCharsets.UTF_8);
                 System.out.println(str);
-                this.rBlock--;
-                return true;
-                
+                return str;
             }catch(IOException e){
                 e.printStackTrace();
-                return false;
+                return "Leitura nao realizada";
             }
-        }return true;
     }  
 }
