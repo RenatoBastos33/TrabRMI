@@ -5,11 +5,11 @@ import java.util.concurrent.Semaphore;
 
 
 public class trabalhoServidor implements trabalho{
-
-
+    private Semaphore[][] semaforos;
     private Arquivo[] listaArquivos;
-    private trabalhoServidor(Arquivo[] listaArquivos){
+    private trabalhoServidor(Arquivo[] listaArquivos, Semaphore[][] semaforos){
             this.listaArquivos = listaArquivos;
+            this.semaforos = semaforos
     }
     public static void main(String[] args) {
         Arquivo file1 = new Arquivo("arq1.txt");
@@ -25,7 +25,7 @@ public class trabalhoServidor implements trabalho{
                 semaforos[i][0]=new Semaphore(3);
                 semaforos[i][1]=new Semaphore(1);
             }
-            trabalhoServidor obj = new trabalhoServidor(lista);
+            trabalhoServidor obj = new trabalhoServidor(lista, semaforos);
             trabalho stub = (trabalho) UnicastRemoteObject.exportObject(obj, 0);
             Registry registry = LocateRegistry.getRegistry();
             registry.bind("trabalho", stub);
