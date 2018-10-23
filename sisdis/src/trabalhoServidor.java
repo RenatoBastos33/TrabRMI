@@ -66,9 +66,9 @@ public class trabalhoServidor implements trabalho{
                 semaforos[arq][escrita].release();
                 semaforos[arq][leitura].release();
             }else{
-                semaforos[arq][0].acquire();
+                semaforos[arq][leitura].acquire();
                 listaArquivos[arq].ler(ini,fim);
-                semaforos[arq][0].release();
+                semaforos[arq][leitura].release();
             }
         }catch(Exception e) {
             System.err.println("Exceção: " + e.toString());
