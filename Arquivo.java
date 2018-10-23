@@ -26,7 +26,7 @@ public class Arquivo {
     }
     
     public boolean escrever(String frase){
-        if (this.wBlock>0 || this.rBlock>0){
+        if (this.wBlock==0 && this.rBlock==0){
             this.wBlock++;
             try{
                 FileWriter fw = new FileWriter(this.file,true);
@@ -45,7 +45,7 @@ public class Arquivo {
         return false;
     }
     public boolean ler(int inic,int fim){
-        if(this.wBlock>0){
+        if(this.wBlock==0){
             this.rBlock++;
             try{
                 FileInputStream arq=new FileInputStream(this.file);
