@@ -7,7 +7,7 @@ import java.util.concurrent.Semaphore;
 public class trabalhoServidor implements trabalho{
     private static final int leitura = 0, escrita = 1;
     private Semaphore[][] semaforos;
-    private boolean prioridade = true;
+    private static boolean prioridade = true;
     private Arquivo[] listaArquivos;
     private trabalhoServidor(Arquivo[] listaArquivos, Semaphore[][] semaforos){
             this.listaArquivos = listaArquivos;
@@ -25,8 +25,8 @@ public class trabalhoServidor implements trabalho{
         try {
             Semaphore[][] semaforos=new Semaphore[3][2];
             for(int i=0;i<3;i++){
-                semaforos[i][leitura]=new Semaphore(3);
-                semaforos[i][escrita]=new Semaphore(1);
+                semaforos[i][leitura]=new Semaphore(3,!prioridade);
+                semaforos[i][escrita]=new Semaphore(1,!prioridade);
             }
             trabalhoServidor obj = new trabalhoServidor(lista, semaforos);
             trabalho stub = (trabalho) UnicastRemoteObject.exportObject(obj, 0);
@@ -59,22 +59,14 @@ public class trabalhoServidor implements trabalho{
     @Override
     public String lerRMI(int ini, int fim, int arq) {
         try{
-            if(!this.prioridade){
-                semaforos[arq][escrita].acquire();
-                semaforos[arq][leitura].acquire();
-                listaArquivos[arq].ler(ini,fim);
-                semaforos[arq][escrita].release();
-                semaforos[arq][leitura].release();
-            }else{
-                semaforos[arq][leitura].acquire();
-                listaArquivos[arq].ler(ini,fim);
-                semaforos[arq][leitura].release();
-            }
+            semaforos[arq][leitura].acquire();
+            listaArquivos[arq].ler(ini,fim);
+            semaforos[arq][leitura].release();
+
         }catch(Exception e) {
             System.err.println("Exceção: " + e.toString());
             return "Deu erro :"+ e;
         }
-
         return null;
     }
 }
