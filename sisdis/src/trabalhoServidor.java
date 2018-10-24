@@ -24,7 +24,7 @@ public class trabalhoServidor implements trabalho{
         lista[0] = file1;
         lista[1] = file2;
         lista[2] = file3;
-        try {//dsadsa
+        try {
             Semaphore[][] semaforos=new Semaphore[3][2];
             for(int i=0;i<3;i++){
                 semaforos[i][leitura]=new Semaphore(3,semprioridade);

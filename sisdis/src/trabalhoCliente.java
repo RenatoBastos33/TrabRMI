@@ -7,8 +7,8 @@ public class trabalhoCliente implements Runnable {
     private static int w = 'w';
     private static int r = 'r';
     private static int pedidos[][][] = {
-            {{w, 0}, {w, 0}},     //,{w,1},{r,1},{r,3},{},w,r,r,w}
-            {{r, 0}, {r, 0}},
+            {{r, 0}, {r, 0}},     //,{w,1},{r,1},{r,3},{},w,r,r,w}
+            {{w, 0}, {r, 0}},
             {{r, 0}, {w, 0}}
     };
     private static long tempoComeco = System.currentTimeMillis();
@@ -32,22 +32,23 @@ public class trabalhoCliente implements Runnable {
             trabalho stub = (trabalho) registry.lookup("trabalho");
             //boolean deuBom = stub.escreverRMI("JAVA IS TRASH ", 1);
             String nome = Thread.currentThread().getName();
-            System.out.println("Nome: " + nome);
             int id = Integer.parseInt(nome);
-            sleep(id * 100);
+            sleep(id * 200);
+            System.out.println("Nome: " + nome);
             for(int i = 0; i < 2; i++) {
                 if(pedidos[id][i][0] == w){
-
+                    System.out.println("Processo "+id + " Escrita " + i);
                     boolean escreveu = stub.escreverRMI(escritas[id],pedidos[id][i][1]);
                     long tempoVar = System.currentTimeMillis() - tempoComeco;
-                    System.out.println("Escrita Tempo: " + tempoVar);
+                    System.out.println("Processo "+id +" Escrita " + i + " Tempo: " + tempoVar);
 
                 }
                 else{
+                    System.out.println("Processo "+id + " Leitura " + i);
                     String lido = stub.lerRMI(0, 100, pedidos[id][i][1]);
                     long tempoVar = System.currentTimeMillis() - tempoComeco;
 
-                    System.out.println("Leitura Tempo: " + tempoVar);
+                    System.out.println("Processo "+id +  " Leitura " + i + " Tempo: " + tempoVar);
 
                 }
 
