@@ -40,7 +40,7 @@ public class trabalhoCliente implements Runnable {
                     System.out.println("Processo "+id + " Escrita " + i + " Arquivo: " + pedidos[id][i][1]);
                     boolean escreveu = stub.escreverRMI(escritas[id],pedidos[id][i][1]);
                     long tempoVar = System.currentTimeMillis() - tempoComeco;
-                    System.out.println("O Cliente recebeu o processo "+id +" de escrita " + i + escreveu + " Arquivo: " + pedidos[id][i][1] + " \nTempo: " + tempoVar);
+                    System.out.println("O Cliente recebeu o processo "+id +" de escrita " + i + escreveu + " Arquivo: " + pedidos[id][i][1] + " \nTempo: " + tempoVar+"\n");
 
                 }
                 else{
@@ -48,7 +48,7 @@ public class trabalhoCliente implements Runnable {
                     String lido = stub.lerRMI(0, 100, pedidos[id][i][1]);
                     long tempoVar = System.currentTimeMillis() - tempoComeco;
 
-                    System.out.println("O cliente recebeu o processo "+id +  " Leitura: " + i + " Arquivo: " + pedidos[id][i][1] + "  " + lido + " \nTempo: " + tempoVar);
+                    System.out.println("O cliente recebeu o processo "+id +  " Leitura: " + i + " Arquivo: " + pedidos[id][i][1] + "  " + lido + " \nTempo: " + tempoVar+"\n");
 
                 }
 

@@ -45,7 +45,7 @@ public class trabalhoServidor implements trabalho{
     @Override
     public boolean escreverRMI(String texto, int arq) {
         try {
-            System.out.println("NovaEscrita, arq" + (arq+1));
+            System.out.println("NovaEscrita, arq" + (arq));
             semaforos[arq][leitura].acquire(3);
             semaforos[arq][escrita].acquire();
             boolean escreveu = listaArquivos[arq].escrever(texto);
@@ -63,10 +63,10 @@ public class trabalhoServidor implements trabalho{
     @Override
     public String lerRMI(int ini, int fim, int arq) {
         try{
-            System.out.println("NovaLeitura, arq" + (arq+1));
+            System.out.println("NovaLeitura, arq" + (arq));
             semaforos[arq][leitura].acquire();
             String retorno = listaArquivos[arq].ler(ini,fim);
-            System.out.println("Leitura: " + retorno);
+            System.out.println("Leitura: " + retorno+"\n");
             sleep(1000);
             semaforos[arq][leitura].release();
             return retorno;
