@@ -7,12 +7,12 @@ public class trabalhoCliente implements Runnable {
     private static int w = 'w';
     private static int r = 'r';
     private static int pedidos[][][] = {
-            {{r, 0}, {r, 0}},     //,{w,1},{r,1},{r,3},{},w,r,r,w}
-            {{r, 0}, {r, 0}},
-            {{w, 0}, {r, 0}}
+            {{r, 0}, {w, 2}, {r, 2}, {r, 0}},     //,{w,1},{r,1},{r,3},{},w,r,r,w}
+            {{w, 1}, {w, 1}, {r, 1}, {r, 0}},
+            {{r, 1}, {r, 1}, {r, 0}, {w, 0}}
     };
     private static long tempoComeco = System.currentTimeMillis();
-    private static String escritas[] = {"JavaLixo ", "Saudades MPI ", "C é vida "};
+    private static String escritas[] = {"Java gosta de escrever comandos longos ", "Saudades MPI ", "C é vida "};
     public static void main(String[] args) {
         Thread[] clientes= new Thread[3];
         clientes[0] = new Thread(new trabalhoCliente(), "0");
@@ -35,20 +35,20 @@ public class trabalhoCliente implements Runnable {
             int id = Integer.parseInt(nome);
             sleep(id * 200);
             System.out.println("Nome: " + nome);
-            for(int i = 0; i < 2; i++) {
+            for(int i = 0; i < pedidos[id].length; i++) {
                 if(pedidos[id][i][0] == w){
-                    System.out.println("Processo "+id + " Escrita " + i);
+                    System.out.println("Processo "+id + " Escrita " + i + " Arquivo: " + pedidos[id][i][1]);
                     boolean escreveu = stub.escreverRMI(escritas[id],pedidos[id][i][1]);
                     long tempoVar = System.currentTimeMillis() - tempoComeco;
-                    System.out.println("Processo "+id +" Escrita " + i + " Tempo: " + tempoVar);
+                    System.out.println("Processo "+id +" Escrita " + i + escreveu + " Arquivo: " + pedidos[id][i][1] + " \nTempo: " + tempoVar);
 
                 }
                 else{
-                    System.out.println("Processo "+id + " Leitura " + i);
+                    System.out.println("Processo "+id + " Leitura " + i+ " Arquivo: " + pedidos[id][i][1]);
                     String lido = stub.lerRMI(0, 100, pedidos[id][i][1]);
                     long tempoVar = System.currentTimeMillis() - tempoComeco;
 
-                    System.out.println("Processo "+id +  " Leitura: " + i + "  " + lido + " Tempo: " + tempoVar);
+                    System.out.println("Processo "+id +  " Leitura: " + i + " Arquivo: " + pedidos[id][i][1] + "  " + lido + " \nTempo: " + tempoVar);
 
                 }
 

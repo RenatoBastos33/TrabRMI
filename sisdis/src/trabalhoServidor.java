@@ -17,9 +17,9 @@ public class trabalhoServidor implements trabalho{
     }
     public static void main(String[] args) {
 
-        Arquivo file1 = new Arquivo("arq1.txt");
-        Arquivo file2 = new Arquivo("arq2.txt");
-        Arquivo file3 = new Arquivo("arq3.txt");
+        Arquivo file1 = new Arquivo("arq0txt");
+        Arquivo file2 = new Arquivo("arq1.txt");
+        Arquivo file3 = new Arquivo("arq2.txt");
         Arquivo[] lista = new Arquivo[3];
         lista[0] = file1;
         lista[1] = file2;
@@ -27,8 +27,8 @@ public class trabalhoServidor implements trabalho{
         try {
             Semaphore[][] semaforos = new Semaphore[3][2];
             for(int i=0;i<3;i++){
-                semaforos[i][leitura] = new Semaphore(3, !prioridade);
-                semaforos[i][escrita] = new Semaphore(1, !prioridade);
+                semaforos[i][leitura] = new Semaphore(3, prioridade);
+                semaforos[i][escrita] = new Semaphore(1, prioridade);
             }
             trabalhoServidor obj = new trabalhoServidor(lista, semaforos);
             trabalho stub = (trabalho) UnicastRemoteObject.exportObject(obj, 0);
@@ -45,13 +45,13 @@ public class trabalhoServidor implements trabalho{
     @Override
     public boolean escreverRMI(String texto, int arq) {
         try {
-            System.out.println("NovaEscrita");
-            semaforos[arq][escrita].acquire();
+            System.out.println("NovaEscrita, arq" + (arq+1));
             semaforos[arq][leitura].acquire(3);
+            semaforos[arq][escrita].acquire();
             boolean escreveu = listaArquivos[arq].escrever(texto);
             sleep(1000);
-            semaforos[arq][leitura].release(3);
             semaforos[arq][escrita].release();
+            semaforos[arq][leitura].release(3);
             return escreveu;
         }
         catch(Exception e) {
@@ -63,7 +63,7 @@ public class trabalhoServidor implements trabalho{
     @Override
     public String lerRMI(int ini, int fim, int arq) {
         try{
-            System.out.println("NovaLeitura");
+            System.out.println("NovaLeitura, arq" + (arq+1));
             semaforos[arq][leitura].acquire();
             String retorno = listaArquivos[arq].ler(ini,fim);
             System.out.println("Leitura: " + retorno);

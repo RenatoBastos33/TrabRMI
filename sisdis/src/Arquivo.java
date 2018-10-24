@@ -7,7 +7,7 @@
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class Arquivo{
+class Arquivo{
     private File file;
     
     Arquivo(String file){
@@ -20,7 +20,7 @@ public class Arquivo{
                 BufferedWriter bw = new BufferedWriter(fw);
                 bw.write(frase);
                 bw.close();
-                System.out.println("Ok!");
+                System.out.println("Escrita no arquivo " + this.file.getName() + " concluida");
                 return true;
             }
             catch (IOException e) {
@@ -36,7 +36,7 @@ public class Arquivo{
                 byte[] bytes=new byte[fim-inic];
                 arq.read(bytes);
                 String str = new String(bytes, StandardCharsets.UTF_8);
-                System.out.println(str);
+                System.out.println("Leitura no arquivo: " + this.file.getName() + " concluida");
                 return str;
             }catch(IOException e){
                 e.printStackTrace();
