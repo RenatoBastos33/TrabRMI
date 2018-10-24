@@ -7,9 +7,9 @@ public class trabalhoCliente implements Runnable {
     private static int w = 'w';
     private static int r = 'r';
     private static int pedidos[][][] = {
-            {{r, 0}, {w, 2}, {r, 2}, {r, 0}},     //,{w,1},{r,1},{r,3},{},w,r,r,w}
-            {{w, 1}, {w, 1}, {r, 1}, {r, 0}},
-            {{r, 1}, {r, 1}, {r, 0}, {w, 0}}
+            {{r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}},     //,{w,1},{r,1},{r,3},{},w,r,r,w}
+            {{r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}},
+            {{w, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}, {r, 0}}
     };
     private static long tempoComeco = System.currentTimeMillis();
     private static String escritas[] = {"Java gosta de escrever comandos longos ", "Saudades MPI ", "C é vida "};
@@ -40,7 +40,7 @@ public class trabalhoCliente implements Runnable {
                     System.out.println("Processo "+id + " Escrita " + i + " Arquivo: " + pedidos[id][i][1]);
                     boolean escreveu = stub.escreverRMI(escritas[id],pedidos[id][i][1]);
                     long tempoVar = System.currentTimeMillis() - tempoComeco;
-                    System.out.println("Processo "+id +" Escrita " + i + escreveu + " Arquivo: " + pedidos[id][i][1] + " \nTempo: " + tempoVar);
+                    System.out.println("O Cliente recebeu o processo "+id +" de escrita " + i + escreveu + " Arquivo: " + pedidos[id][i][1] + " \nTempo: " + tempoVar);
 
                 }
                 else{
@@ -48,7 +48,7 @@ public class trabalhoCliente implements Runnable {
                     String lido = stub.lerRMI(0, 100, pedidos[id][i][1]);
                     long tempoVar = System.currentTimeMillis() - tempoComeco;
 
-                    System.out.println("Processo "+id +  " Leitura: " + i + " Arquivo: " + pedidos[id][i][1] + "  " + lido + " \nTempo: " + tempoVar);
+                    System.out.println("O cliente recebeu o processo "+id +  " Leitura: " + i + " Arquivo: " + pedidos[id][i][1] + "  " + lido + " \nTempo: " + tempoVar);
 
                 }
 
