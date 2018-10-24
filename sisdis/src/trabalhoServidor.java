@@ -3,11 +3,13 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.Semaphore;
 
+import static java.lang.Thread.sleep;
+
 
 public class trabalhoServidor implements trabalho{
     private static final int leitura = 0, escrita = 1;
     private Semaphore[][] semaforos;
-    private static boolean prioridade = true;
+    private static boolean semprioridade = true;
     private Arquivo[] listaArquivos;
     private trabalhoServidor(Arquivo[] listaArquivos, Semaphore[][] semaforos){
             this.listaArquivos = listaArquivos;
@@ -25,8 +27,8 @@ public class trabalhoServidor implements trabalho{
         try {
             Semaphore[][] semaforos=new Semaphore[3][2];
             for(int i=0;i<3;i++){
-                semaforos[i][leitura]=new Semaphore(3,!prioridade);
-                semaforos[i][escrita]=new Semaphore(1,!prioridade);
+                semaforos[i][leitura]=new Semaphore(3,semprioridade);
+                semaforos[i][escrita]=new Semaphore(1,semprioridade);
             }
             trabalhoServidor obj = new trabalhoServidor(lista, semaforos);
             trabalho stub = (trabalho) UnicastRemoteObject.exportObject(obj, 0);
@@ -43,11 +45,14 @@ public class trabalhoServidor implements trabalho{
     @Override
     public boolean escreverRMI(String texto, int arq) {
         try {
+            System.out.println("NovaEscrita");
             semaforos[arq][escrita].acquire();
             semaforos[arq][leitura].acquire(3);
             listaArquivos[arq].escrever(texto);
+            sleep(1000);
             semaforos[arq][escrita].release();
             semaforos[arq][leitura].release(3);
+
             return true;
         }
         catch(Exception e) {
@@ -59,15 +64,17 @@ public class trabalhoServidor implements trabalho{
     @Override
     public String lerRMI(int ini, int fim, int arq) {
         try{
+            System.out.println("NovaLeitura");
             semaforos[arq][leitura].acquire();
-            listaArquivos[arq].ler(ini,fim);
+            String retorno = listaArquivos[arq].ler(ini,fim);
+            System.out.println("Leitura: " + retorno);
+            sleep(1000);
             semaforos[arq][leitura].release();
-
+            return retorno;
         }catch(Exception e) {
             System.err.println("Exceção: " + e.toString());
             return "Deu erro :"+ e;
         }
-        return null;
     }
 }
 
