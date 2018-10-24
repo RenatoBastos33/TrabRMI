@@ -9,7 +9,7 @@ import static java.lang.Thread.sleep;
 public class trabalhoServidor implements trabalho{
     private static final int leitura = 0, escrita = 1;
     private Semaphore[][] semaforos;
-    private static boolean semprioridade = true;
+    private static final boolean prioridade = false;
     private Arquivo[] listaArquivos;
     private trabalhoServidor(Arquivo[] listaArquivos, Semaphore[][] semaforos){
             this.listaArquivos = listaArquivos;
@@ -25,10 +25,10 @@ public class trabalhoServidor implements trabalho{
         lista[1] = file2;
         lista[2] = file3;
         try {
-            Semaphore[][] semaforos=new Semaphore[3][2];
+            Semaphore[][] semaforos = new Semaphore[3][2];
             for(int i=0;i<3;i++){
-                semaforos[i][leitura]=new Semaphore(3,semprioridade);
-                semaforos[i][escrita]=new Semaphore(1,semprioridade);
+                semaforos[i][leitura] = new Semaphore(3, !prioridade);
+                semaforos[i][escrita] = new Semaphore(1, !prioridade);
             }
             trabalhoServidor obj = new trabalhoServidor(lista, semaforos);
             trabalho stub = (trabalho) UnicastRemoteObject.exportObject(obj, 0);
@@ -48,12 +48,11 @@ public class trabalhoServidor implements trabalho{
             System.out.println("NovaEscrita");
             semaforos[arq][escrita].acquire();
             semaforos[arq][leitura].acquire(3);
-            listaArquivos[arq].escrever(texto);
+            boolean escreveu = listaArquivos[arq].escrever(texto);
             sleep(1000);
-            semaforos[arq][escrita].release();
             semaforos[arq][leitura].release(3);
-
-            return true;
+            semaforos[arq][escrita].release();
+            return escreveu;
         }
         catch(Exception e) {
             System.err.println("Exceção: " + e.toString());
@@ -73,7 +72,7 @@ public class trabalhoServidor implements trabalho{
             return retorno;
         }catch(Exception e) {
             System.err.println("Exceção: " + e.toString());
-            return "Deu erro :"+ e;
+            return "Deu erro :" + e;
         }
     }
 }

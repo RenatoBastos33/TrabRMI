@@ -8,8 +8,8 @@ public class trabalhoCliente implements Runnable {
     private static int r = 'r';
     private static int pedidos[][][] = {
             {{r, 0}, {r, 0}},     //,{w,1},{r,1},{r,3},{},w,r,r,w}
-            {{w, 0}, {r, 0}},
-            {{r, 0}, {w, 0}}
+            {{r, 0}, {r, 0}},
+            {{w, 0}, {r, 0}}
     };
     private static long tempoComeco = System.currentTimeMillis();
     private static String escritas[] = {"JavaLixo ", "Saudades MPI ", "C é vida "};
