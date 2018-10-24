@@ -48,7 +48,7 @@ public class trabalhoCliente implements Runnable {
                     String lido = stub.lerRMI(0, 100, pedidos[id][i][1]);
                     long tempoVar = System.currentTimeMillis() - tempoComeco;
 
-                    System.out.println("Processo "+id +  " Leitura " + i + " Tempo: " + tempoVar);
+                    System.out.println("Processo "+id +  " Leitura: " + i + "  " + lido + " Tempo: " + tempoVar);
 
                 }
 
