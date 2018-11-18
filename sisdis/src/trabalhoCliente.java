@@ -28,7 +28,7 @@ public class trabalhoCliente implements Runnable {
         //String host = (args.length < 1) ? null :args[0];
 
         try{
-            Registry registry = LocateRegistry.getRegistry();
+            Registry registry = LocateRegistry.getRegistry("3.16.150.80",6350);
             trabalho stub = (trabalho) registry.lookup("trabalho");
             //boolean deuBom = stub.escreverRMI("JAVA IS TRASH ", 1);
             String nome = Thread.currentThread().getName();
