@@ -32,7 +32,7 @@ public class trabalhoServidor implements trabalho{
             }
             trabalhoServidor obj = new trabalhoServidor(lista, semaforos);
             trabalho stub = (trabalho) UnicastRemoteObject.exportObject(obj, 0);
-            Registry registry = LocateRegistry.getRegistry();
+            Registry registry = LocateRegistry.createRegistry(22);
             registry.bind("trabalho", stub);
             System.out.println("Servidor na linha!");
         }
